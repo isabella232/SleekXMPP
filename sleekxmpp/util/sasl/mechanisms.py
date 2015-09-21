@@ -136,6 +136,22 @@ class X_OAUTH2(Mech):
         return b'\x00' + self.credentials['username'] + \
                b'\x00' + self.credentials['access_token']
 
+@sasl_mech(10)
+class X_HIPCHAT_OAUTH2(Mech):
+
+    """
+    HipChat's OAUTH2 authentication mechanism as documented on `docs.atlassian.com`_.
+
+    .. _docs.atlassian.com: https://docs.atlassian.com/hipchat.xmpp/latest/xmpp/auth.html
+    """
+
+    name = 'X-HIPCHAT-OAUTH2'
+    required_credentials = set(['access_token', 'resource'])
+
+    def process(self, challenge=b''):
+        token = self.credentials['access_token']
+        resource = self.credentials['resource']
+        return b'\x00' + token + b'\x00' + resource
 
 @sasl_mech(3)
 class X_GOOGLE_TOKEN(Mech):
